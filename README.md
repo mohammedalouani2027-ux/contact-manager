@@ -1,133 +1,133 @@
 # Contact Manager — Laravel 13 + Inertia.js + React (SQLite)
 
-A simple, fully functional **Contact Management (CRUD)** application built for the
-**Seomaniak 2026 Developer Test**.
+Une application **de gestion de contacts (CRUD)** simple et entièrement fonctionnelle,
+réalisée dans le cadre du **Test Développeur Seomaniak 2026**.
 
-It lets you create, list, search, view, edit and delete contacts. The backend is
-Laravel 13, the frontend is React rendered through Inertia.js (no separate API layer),
-and data is stored in a zero-config SQLite file.
-
----
-
-## 🧱 Stack
-
-| Layer     | Technology                                  |
-| --------- | ------------------------------------------- |
-| Backend   | Laravel 13 (PHP 8.3+)                        |
-| Frontend  | React 18 via Inertia.js 2                    |
-| Bundler   | Vite 6                                       |
-| Styling   | Tailwind CSS v4                              |
-| Database  | SQLite                                       |
-| Testing   | PHPUnit 11                                   |
-
-Inertia.js glues Laravel and React together: controllers return `Inertia::render()`
-instead of Blade views or JSON, and each React page component receives its data as props.
-No REST endpoints, no client-side routing setup.
+Elle permet de créer, lister, rechercher, consulter, modifier et supprimer des contacts.
+Le back-end est en Laravel 13, le front-end en React affiché via Inertia.js (sans couche
+API séparée), et les données sont stockées dans un fichier SQLite sans configuration.
 
 ---
 
-## ✅ Requirements
+## 🧱 Stack technique
 
-- PHP **8.3+** with the `pdo_sqlite` extension enabled
+| Couche          | Technologie                |
+| --------------- | -------------------------- |
+| Back-end        | Laravel 13 (PHP 8.3+)      |
+| Front-end       | React 18 via Inertia.js 2  |
+| Bundler         | Vite 6                     |
+| Styles          | Tailwind CSS v4            |
+| Base de données | SQLite                     |
+| Tests           | PHPUnit 12                 |
+
+Inertia.js relie Laravel et React : les contrôleurs renvoient `Inertia::render()`
+au lieu de vues Blade ou de JSON, et chaque composant de page React reçoit ses données
+sous forme de props. Aucune route REST, aucune configuration de routage côté client.
+
+---
+
+## ✅ Prérequis
+
+- PHP **8.3+** avec l'extension `pdo_sqlite` activée
 - Composer 2
-- Node.js **18+** and npm
+- Node.js **18+** et npm
 
 ---
 
-## 🚀 Setup
+## 🚀 Installation
 
 ```bash
-# 1. Install PHP dependencies
+# 1. Installer les dépendances PHP
 composer install
 
-# 2. Install JS dependencies
+# 2. Installer les dépendances JavaScript
 npm install
 
-# 3. Create your environment file & app key
+# 3. Créer le fichier d'environnement et la clé d'application
 cp .env.example .env
 php artisan key:generate
 
-# 4. Create the SQLite database file (if it doesn't exist) and run migrations + demo data
+# 4. Créer le fichier SQLite (s'il n'existe pas) puis lancer les migrations + les données de démo
 touch database/database.sqlite
 php artisan migrate --seed
 
-# 5a. Build the frontend once...
+# 5a. Compiler le front-end une fois...
 npm run build
 
-# 5b. ...or run Vite in watch mode during development (in a second terminal)
+# 5b. ...ou lancer Vite en mode surveillance pendant le développement (dans un 2e terminal)
 npm run dev
 
-# 6. Serve the app
+# 6. Démarrer l'application
 php artisan serve
 ```
 
-Then open **http://localhost:8000** — the root URL redirects to `/contacts`.
+Ouvre ensuite **http://localhost:8000** — l'URL racine redirige vers `/contacts`.
 
-> Tip: `composer run dev` starts the PHP server, queue listener and Vite together.
+> Astuce : `composer run dev` démarre le serveur PHP, l'écouteur de file d'attente et Vite en même temps.
 
 ---
 
 ## 🗺️ Routes
 
-The app uses a single Laravel resource route (`Route::resource('contacts', ...)`),
-which expands to the standard 7 RESTful routes:
+L'application utilise une seule route de ressource Laravel (`Route::resource('contacts', ...)`),
+qui se déploie en 7 routes RESTful standard :
 
-| Verb        | URI                      | Action  | Purpose                         |
-| ----------- | ------------------------ | ------- | ------------------------------- |
-| GET         | `/contacts`              | index   | List + search + paginate        |
-| GET         | `/contacts/create`       | create  | Show the "new contact" form     |
-| POST        | `/contacts`              | store   | Persist a new contact           |
-| GET         | `/contacts/{contact}`    | show    | Show one contact                |
-| GET         | `/contacts/{contact}/edit` | edit  | Show the edit form              |
-| PUT/PATCH   | `/contacts/{contact}`    | update  | Update a contact                |
-| DELETE      | `/contacts/{contact}`    | destroy | Delete a contact                |
+| Verbe       | URI                        | Action  | Rôle                                   |
+| ----------- | -------------------------- | ------- | -------------------------------------- |
+| GET         | `/contacts`                | index   | Lister + rechercher + paginer          |
+| GET         | `/contacts/create`         | create  | Afficher le formulaire de création     |
+| POST        | `/contacts`                | store   | Enregistrer un nouveau contact         |
+| GET         | `/contacts/{contact}`      | show    | Afficher un contact                    |
+| GET         | `/contacts/{contact}/edit` | edit    | Afficher le formulaire de modification |
+| PUT/PATCH   | `/contacts/{contact}`      | update  | Mettre à jour un contact               |
+| DELETE      | `/contacts/{contact}`      | destroy | Supprimer un contact                   |
 
-`GET /` redirects to `/contacts`.
+`GET /` redirige vers `/contacts`.
 
 ---
 
-## 🗂️ Project structure
+## 🗂️ Structure du projet
 
 ```
 contact-manager/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   └── ContactController.php     # CRUD logic (index/create/store/show/edit/update/destroy)
+│   │   │   └── ContactController.php     # Logique CRUD (index/create/store/show/edit/update/destroy)
 │   │   ├── Requests/
-│   │   │   ├── StoreContactRequest.php   # Validation for creating
-│   │   │   └── UpdateContactRequest.php  # Validation for updating (unique email ignores self)
+│   │   │   ├── StoreContactRequest.php   # Validation à la création
+│   │   │   └── UpdateContactRequest.php  # Validation à la modification (email unique, s'ignore lui-même)
 │   │   └── Middleware/
-│   │       └── HandleInertiaRequests.php # Shares flash messages + app name with React
+│   │       └── HandleInertiaRequests.php # Partage les messages flash + le nom de l'app avec React
 │   ├── Models/
-│   │   └── Contact.php                   # Eloquent model
+│   │   └── Contact.php                   # Modèle Eloquent
 │   └── Providers/AppServiceProvider.php
 ├── bootstrap/
-│   └── app.php                           # Laravel 13 app config + middleware registration
+│   └── app.php                           # Configuration de l'app Laravel 13 + middleware
 ├── config/
 │   ├── app.php
-│   └── database.php                      # SQLite set as default connection
+│   └── database.php                      # SQLite défini comme connexion par défaut
 ├── database/
 │   ├── migrations/…create_contacts_table.php
-│   ├── factories/ContactFactory.php      # Fake data (Moroccan-style phone numbers)
-│   ├── seeders/DatabaseSeeder.php        # Seeds 12 demo contacts
-│   └── database.sqlite                   # The SQLite database file
+│   ├── factories/ContactFactory.php      # Fausses données (numéros de téléphone marocains)
+│   ├── seeders/DatabaseSeeder.php        # Insère 12 contacts de démonstration
+│   └── database.sqlite                   # Le fichier de base de données SQLite
 ├── resources/
-│   ├── css/app.css                       # Tailwind v4 + brand tokens
+│   ├── css/app.css                       # Tailwind v4 + variables de marque
 │   ├── js/
-│   │   ├── app.jsx                       # Inertia + React bootstrap
-│   │   ├── Layouts/AppLayout.jsx         # Header, nav, toast flash messages
-│   │   ├── Components/ContactForm.jsx    # Reusable form (shared by Create & Edit)
+│   │   ├── app.jsx                       # Amorçage Inertia + React
+│   │   ├── Layouts/AppLayout.jsx         # En-tête, navigation, notifications flash (toast)
+│   │   ├── Components/ContactForm.jsx    # Formulaire réutilisable (partagé par Create & Edit)
 │   │   └── Pages/Contacts/
-│   │       ├── Index.jsx                 # Table, search, pagination, delete
+│   │       ├── Index.jsx                 # Tableau, recherche, pagination, suppression
 │   │       ├── Create.jsx
 │   │       ├── Edit.jsx
 │   │       └── Show.jsx
-│   └── views/app.blade.php               # Root HTML that mounts Inertia
+│   └── views/app.blade.php               # HTML racine qui monte Inertia
 ├── routes/
 │   ├── web.php                           # Route::resource('contacts', ...)
 │   └── console.php
-├── tests/Feature/ContactTest.php         # CRUD + validation tests
+├── tests/Feature/ContactTest.php         # Tests CRUD + validation
 ├── composer.json
 ├── package.json
 └── vite.config.js
@@ -135,32 +135,33 @@ contact-manager/
 
 ---
 
-## 🧪 Running tests
+## 🧪 Lancer les tests
 
 ```bash
 php artisan test
 ```
 
-Covers: index loads, contact creation, required/unique email validation, update, and delete.
+Couvre : le chargement de la liste, la création d'un contact, la validation email
+obligatoire/unique, la mise à jour et la suppression.
 
 ---
 
-## ✨ Features
+## ✨ Fonctionnalités
 
-- Full CRUD with clean, RESTful routing
-- Server-side validation via Form Requests, errors shown inline in the form
-- Live search across name / email / company
-- Pagination (8 per page)
-- Flash "toast" confirmations after each action
-- Reusable form component shared between Create and Edit
-- Responsive Tailwind UI
+- CRUD complet avec un routage RESTful propre
+- Validation côté serveur via les Form Requests, erreurs affichées directement dans le formulaire
+- Recherche instantanée sur nom / email / société
+- Pagination (8 par page)
+- Notifications « toast » après chaque action
+- Composant de formulaire réutilisable, partagé entre la création et la modification
+- Interface responsive avec Tailwind
 
 ---
 
-## 📼 Test deliverables reminder (Seomaniak)
+## 📼 Rappel des livrables (Seomaniak)
 
-- [ ] Push this repository to **GitHub**
-- [ ] Record `App_Demo.mp4` (app in action)
-- [ ] Take **5 screenshots** (list, create form, validation error, edit, delete confirmation)
-- [ ] Record `Pitch_Dev_PrénomNom.mp4` (1 min: what you did / learned / would improve)
-- [ ] Upload everything to `Test_Seomaniak_PrénomNom_2025` and share with **info@seomaniak.ma**
+- [ ] Pousser ce dépôt sur **GitHub**
+- [ ] Enregistrer `App_Demo.mp4` (l'application en action)
+- [ ] Prendre **5 captures d'écran** (liste, formulaire de création, erreur de validation, modification, confirmation de suppression)
+- [ ] Enregistrer `Pitch_Dev_PrénomNom.mp4` (1 min : ce que tu as fait / appris / voudrais améliorer)
+- [ ] Déposer le tout dans `Test_Seomaniak_PrénomNom_2025` et le partager avec **info@seomaniak.ma**
