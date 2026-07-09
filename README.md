@@ -156,12 +156,3 @@ obligatoire/unique, la mise à jour et la suppression.
 - Composant de formulaire réutilisable, partagé entre la création et la modification
 - Interface responsive avec Tailwind
 
----
-
-## 📼 Rappel des livrables (Seomaniak)
-
-- [ ] Pousser ce dépôt sur **GitHub**
-- [ ] Enregistrer `App_Demo.mp4` (l'application en action)
-- [ ] Prendre **5 captures d'écran** (liste, formulaire de création, erreur de validation, modification, confirmation de suppression)
-- [ ] Enregistrer `Pitch_Dev_PrénomNom.mp4` (1 min : ce que tu as fait / appris / voudrais améliorer)
-- [ ] Déposer le tout dans `Test_Seomaniak_PrénomNom_2025` et le partager avec **info@seomaniak.ma**
